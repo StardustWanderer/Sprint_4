@@ -16,12 +16,12 @@ public class OrderPageScooter extends BasePage {
     private final By firstNameInputLocator = By.xpath(".//input[contains(@placeholder, 'Имя')]");
     private final By lastNameInputLocator = By.xpath(".//input[contains(@placeholder, 'Фамилия')]");
     private final By addressInputLocator = By.xpath(".//input[contains(@placeholder, 'Адрес')]");
-    private final By metroDropDownLocator = By.xpath(".//input[contains(@placeholder, 'Станция метро')]");
+    private final By metroDropdownLocator = By.xpath(".//input[contains(@placeholder, 'Станция метро')]");
     private final By phoneInputLocator = By.xpath(".//input[contains(@placeholder, 'Телефон')]");
-    private final By NextButtonLocator = By.xpath(".//button[contains(text(), 'Далее')]");
+    private final By nextButtonLocator = By.xpath(".//button[contains(text(), 'Далее')]");
 
     //будем передавать название станции церез шаблон и в методе формировать xpath
-    String metroStationTemplate = ".//ul//button//div[text()='%s']/parent::button";
+    private static final String METRO_STATION_TEMPLATE = ".//ul//button//div[text()='%s']/parent::button";
 
     //----------------------КОНСТРУКТОР-----------------------
 
@@ -58,14 +58,14 @@ public class OrderPageScooter extends BasePage {
 
     //клик на поле с выпадающим списком станций
     public void clickOnMetroDropdown(){
-        WebElement dropdownElement = wait.until(ExpectedConditions.elementToBeClickable(metroDropDownLocator));
+        WebElement dropdownElement = wait.until(ExpectedConditions.elementToBeClickable(metroDropdownLocator));
         dropdownElement.click();
     }
 
     //Клик на станцию метро в выпадающем списке
     public void clickOnMetroStationInDropdown(String stationName) {
         //подготавливаем xpath для кнопки конкретной станции
-        String metroStationXpathFinal = String.format(metroStationTemplate, stationName);
+        String metroStationXpathFinal = String.format(METRO_STATION_TEMPLATE, stationName);
         By metroStationLocator = By.xpath(metroStationXpathFinal);
 
         //страхуемся, чтобы нужная кнопка в списке отрендерилась + забираем ее в переменную
@@ -88,7 +88,7 @@ public class OrderPageScooter extends BasePage {
 
     //Клик по кнопке далее
     public void clickOnNextButton() {
-        WebElement nextButtonElement = wait.until(ExpectedConditions.elementToBeClickable(NextButtonLocator));
+        WebElement nextButtonElement = wait.until(ExpectedConditions.elementToBeClickable(nextButtonLocator));
         nextButtonElement.click();
     }
 

@@ -5,9 +5,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 public class MainPageScooter extends BasePage {
 
@@ -16,30 +13,26 @@ public class MainPageScooter extends BasePage {
     private static final By uniqueMainPageLocator = By.xpath(".//div[contains(@class, 'Home_Header')]");
 
     //Локаторы для кнопок заказа
+    private static final String ORDER_BUTTON_TEMPLATE = "(.//button[text()='Заказать'])[%d]";
 
-    private final String orderButtonTemplate = "(.//button[text()='Заказать'])[%d]";
-
-    private final By orderButtonHeader = By.xpath(".//div[contains(@class, 'Header_Nav')]//button[text()='Заказать']");
-    private final By orderButtonMiddle = By.xpath(".//div[contains(@class, 'Home_FinishButton')]//button[text()='Заказать']");
-
-    //Локаторы для
+    //Локаторы для аккордеона
     //т.к. у нас 8 одинаковых элементов в аккордионе (хэдингов и панелей с текстом), пришлось подставлять в xpath значения через шаблоны
-    private final String headingLocatorXpathTemplate = ".//div[@id='accordion__heading-%d']";
-    private final String panelLocatorXpathTemplate = ".//div[@id='accordion__panel-%d']/p";
+    private static final String HEADING_LOCATOR_TEMPLATE = ".//div[@id='accordion__heading-%d']";
+    private static final String PANEL_LOCATOR_TEMPLATE = ".//div[@id='accordion__panel-%d']/p";
 
     //----------------------КОНСТРУКТОР-----------------------
 
     //конструктор в который мы будем передавать driver из тестового класса и в котором обращаемся к BasePage
     public MainPageScooter(WebDriver driver) {
         super(driver, uniqueMainPageLocator);
-        this.driver = driver;
     }
 
     //----------------------МЕТОДЫ----------------------------
 
-    //клик на кнопку заказа в хэдэре или посередине страницы, в зависимости от переданного индекса
+    // Нажимает одну из двух кнопок «Заказать».
+    // 1 — кнопка в шапке, 2 — кнопка в нижней части страницы.
     public void clickOrderButton(int buttonIndex) {
-        String orderButtonXpath = String.format(orderButtonTemplate, buttonIndex);
+        String orderButtonXpath = String.format(ORDER_BUTTON_TEMPLATE, buttonIndex);
         By orderButtonLocator = By.xpath(orderButtonXpath);
 
         // Ждем появления в DOM
@@ -55,7 +48,7 @@ public class MainPageScooter extends BasePage {
     //клик по хэдингу аккордиона
     public void clickAccordionHeading(int index) {
         //собираем локатор
-        String headingLocatorXpathFinal = String.format(headingLocatorXpathTemplate, index);
+        String headingLocatorXpathFinal = String.format(HEADING_LOCATOR_TEMPLATE, index);
         By headingLocator = By.xpath(headingLocatorXpathFinal);
 
         //подстраховка, чтобы прогрузился хэдинг
@@ -72,7 +65,7 @@ public class MainPageScooter extends BasePage {
 public String getAccordionPanelText(int index) {
 
         //собираем локатор
-        String panelLocatorXpathFinal = String.format(panelLocatorXpathTemplate, index);
+        String panelLocatorXpathFinal = String.format(PANEL_LOCATOR_TEMPLATE, index);
         By panelLocator = By.xpath(panelLocatorXpathFinal);
 
         //ждем чтобы элемент был виден и возвращаем текст

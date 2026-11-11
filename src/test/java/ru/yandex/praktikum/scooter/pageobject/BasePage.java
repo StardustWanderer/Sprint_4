@@ -9,16 +9,16 @@ import java.time.Duration;
 
 public abstract class BasePage {
 
-    //Создаем переменные с типом WebDriver и WebDriverWait, они будут наследоваться в OrderPageScooter и MainPageScooter
-    protected WebDriver driver;
-    protected WebDriverWait wait;
+    // Базовый класс Page Object: хранит WebDriver и явное ожидание.
+    // При создании страницы ожидает появления её уникального элемента.
+    protected final WebDriver driver;
+    protected final WebDriverWait wait;
+    private static final Duration WAIT_TIMEOUT = Duration.ofSeconds(10);
 
-    //конструктор, в который из классов-наследников будет передаваться ссылка на драйвер в памяти и переменная с локатором уникального элемента страныцм (нужен для ожиданий при первичном открытии страницы)
     public BasePage(WebDriver driver, By uniquePageLocator){
         this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+        this.wait = new WebDriverWait(driver, WAIT_TIMEOUT);
 
-        //теперь каждый наследник будет автоматически запускать ожидаение при первичном открытии страницы
         wait.until(ExpectedConditions.visibilityOfElementLocated(uniquePageLocator));
     }
 }
