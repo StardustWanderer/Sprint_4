@@ -10,19 +10,29 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 public abstract class BaseTest {
     protected WebDriver driver;
 
+    private static final String BASE_URL = "https://qa-scooter.praktikum-services.ru/";
+    private static final String BROWSER = System.getProperty("browser", "firefox");
+
     @Before
     public void setUp(){
-        //здесь создается браузер перед началом теста
-        driver = new ChromeDriver();
-        //driver = new FirefoxDriver();
-        // максимизируем окно, чтобы верстка сайта всегда была десктопной и стабильной
+        switch(BROWSER.toLowerCase()){
+            case "chrome":
+                driver = new ChromeDriver();
+                break;
+
+            case "firefox":
+                driver = new FirefoxDriver();
+                break;
+        }
+
         driver.manage().window().maximize();
-        //открываем страниц
-        driver.get("https://qa-scooter.praktikum-services.ru/");
+        driver.get(BASE_URL);
     }
 
     @After
     public void teardown() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
 }

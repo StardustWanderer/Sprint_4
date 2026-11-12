@@ -7,6 +7,8 @@ import org.junit.runners.Parameterized;
 import ru.yandex.praktikum.scooter.pageobject.MainPageScooter;
 import ru.yandex.praktikum.scooter.pageobject.OrderPageScooter;
 import ru.yandex.praktikum.scooter.pageobject.RentPageScooter;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 @RunWith(Parameterized.class)
 public class CreateOrderTest extends BaseTest {
@@ -23,6 +25,15 @@ public class CreateOrderTest extends BaseTest {
     private final String period;
     private final String color;
     private final String comment;
+
+    private static final DateTimeFormatter DATE_FORMATTER =
+            DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
+    private static String getFutureDate(long daysAhead) {
+        return LocalDate.now()
+                .plusDays(daysAhead)
+                .format(DATE_FORMATTER);
+    }
 
     public CreateOrderTest (int orderButtonIndex,
                             String firstName,
@@ -55,9 +66,9 @@ public class CreateOrderTest extends BaseTest {
                         "Ян",
                         "Ли",
                         "ул. Мира, 1",
-                        "Черкизовская",
+                        "Сокольники",
                         "89991112233",
-                        "30.06.2026",
+                        getFutureDate(3),
                         "сутки",
                         "black",
                         "Позвоните за час"
@@ -69,7 +80,7 @@ public class CreateOrderTest extends BaseTest {
                         "наб. Академика Королева, д. 12, кв. 45",
                         "Сокольники",
                         "89995554422",
-                        "01.07.2026",
+                        getFutureDate(4),
                         "семеро суток",
                         "grey",
                         ""

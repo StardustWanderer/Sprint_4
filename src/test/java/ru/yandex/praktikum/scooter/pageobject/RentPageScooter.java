@@ -20,27 +20,30 @@ public class RentPageScooter extends BasePage {
     private final By deliveryDateInput = By.xpath(".//input[contains(@placeholder, 'Когда привезти самокат')]");
     //для поля с выпадающим с списком с опциями длительности ренты
     private final By rentalPeriodDropdown = By.xpath(".//div[@class='Dropdown-control']");
+
     //в случае с выпадающим списком для выбора продолжительности аренды воспользуемся шаблонами
-    private final String rentalPeriodDropdownOptionTemplate = ".//div[@class='Dropdown-option' and text()='%s']";
+    private static final String RENTAL_PERIOD_DROPDOWN_OPTION_TEMPLATE = ".//div[@class='Dropdown-option' and text()='%s']";
     //для чекбокса с цветом тоже лучше сделать шаблон, т.к. нам нужно будет выбирать через параметризацию цвет самоката
-    private final String colorCheckboxTemplate = ".//label[@for='%s']";
+    private static final String COLOR_CHECKBOX_TEMPLATE = ".//label[@for='%s']";
+
     //для поля комментарий
     private final By commentForDeliveryInput = By.xpath(".//input[contains(@placeholder, 'Комментарий для курьера')]");
     //кнопка "Заказать" внизу страницы рента
-    private final By OrderButtonOnRentPage = By.xpath(".//button[text()='Заказать' and contains(@class, 'Button_Middle')]");
+    private final By orderButtonOnRentPageLocator = By.xpath(".//button[text()='Заказать' and contains(@class, 'Button_Middle')]");
 
     //ЛОКАТОРЫ МОДАЛЬНЫХ ОКОН ПОДТВЕРЖДЕНИЯ ЗАКАЗА И УСПЕШНОГО ОФОРМЛЕНИЯ ЗАКАЗА
 
     //уникальный локатор для модалного окна подтверждения заказа
-    private final By uniqueOrderConfirmationModalLocator = By.xpath(".//div[contains(@class, 'Order_ModalHeader') and contains(text(), 'Хотите оформить заказ?')]");
+    private static final By uniqueOrderConfirmationModalLocator = By.xpath(".//div[contains(@class, 'Order_ModalHeader') and contains(text(), 'Хотите оформить заказ?')]");
 
     // Кнопка "Да" в модальном окне подтверждения заказа
     private final By yesButtonOrderConfirmationModalLocator = By.xpath(".//div[contains(@class, 'Order_Buttons')]//button[text()='Да']");
 
     // Заголовок модального окна об успешном создании заказа, его будем использовать для проверки в тесте
-    private final By confirmationHeaderOrderModel = By.xpath(".//div[contains(@class, 'Order_ModalHeader') and text()='Заказ оформлен']");
+    private final By confirmationHeaderOrderModalLocator = By.xpath(".//div[contains(@class, 'Order_ModalHeader') and text()='Заказ оформлен']");
 
     //----------------------КОНСТРУКТОР-----------------------
+
 
     public RentPageScooter(WebDriver driver){
         super(driver, uniqueRentPageLocator);
@@ -65,7 +68,7 @@ public class RentPageScooter extends BasePage {
 
     //клик на определенную опцию в выпадающем списке
     public void clickOnRentalPeriodDropdownOption(String rentalPeriod) {
-        String rentalPeriodDropdownOptionXpath = String.format(rentalPeriodDropdownOptionTemplate, rentalPeriod);
+        String rentalPeriodDropdownOptionXpath = String.format(RENTAL_PERIOD_DROPDOWN_OPTION_TEMPLATE, rentalPeriod);
         By rentalPeriodDropdownOptionLocator = By.xpath(rentalPeriodDropdownOptionXpath);
 
         WebElement dropdownOptionElement = wait.until(ExpectedConditions.presenceOfElementLocated(rentalPeriodDropdownOptionLocator));
@@ -77,7 +80,7 @@ public class RentPageScooter extends BasePage {
 
     //выбор цвета самоката в чекбоксе
     public void chooseColorCheckBox(String colorData) {
-        String colorCheckBoxXpath = String.format(colorCheckboxTemplate, colorData);
+        String colorCheckBoxXpath = String.format(COLOR_CHECKBOX_TEMPLATE, colorData);
         By colorCheckBoxLocator = By.xpath(colorCheckBoxXpath);
 
         WebElement checkBoxElement = wait.until(ExpectedConditions.elementToBeClickable(colorCheckBoxLocator));
@@ -94,7 +97,7 @@ public class RentPageScooter extends BasePage {
 
     //клик на кнопку заказать на странице ренты
     public void clickOnOrderButtonOnRentPage () {
-        wait.until(ExpectedConditions.elementToBeClickable(OrderButtonOnRentPage)).click();
+        wait.until(ExpectedConditions.elementToBeClickable(orderButtonOnRentPageLocator)).click();
     }
 
     //заполняем поля формы на странице про ренту и кликаем на кнопку заказать
@@ -117,6 +120,6 @@ public class RentPageScooter extends BasePage {
 
     // Проверка, что финальное окно успешно отобразилось (возвращает true/false)
     public boolean isOrderConfirmationModalHeaderDisplayed () {
-        return wait.until(ExpectedConditions.visibilityOfElementLocated(confirmationHeaderOrderModel)).isDisplayed();
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(confirmationHeaderOrderModalLocator)).isDisplayed();
     }
 }
